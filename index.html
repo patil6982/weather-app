@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Modern Weather App</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+  --bg: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  --glass: rgba(255,255,255,0.05);
+  --border: rgba(255,255,255,0.1);
+  --text:#fff;
+  --muted:#aaa;
+  --accent:#00ffd5;
+}
+
+body{
+  background: var(--bg);
+  font-family:'DM Sans',sans-serif;
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:30px 20px;
+  animation:fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+.title{
+  font-family:'Syne';
+  font-size:1.6rem;
+  margin-bottom:20px;
+}
+
+/* SEARCH */
+.search-box{
+  display:flex;
+  gap:10px;
+  width:100%;
+  max-width:420px;
+  margin-bottom:20px;
+}
+
+.search-input{
+  flex:1;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid transparent;
+  background:rgba(255,255,255,0.05);
+  color:#fff;
+  outline:none;
+}
+
+.search-input:focus{
+  border:1px solid var(--accent);
+  box-shadow:0 0 10px var(--accent);
+}
+
+.search-btn{
+  padding:14px 20px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#00ffd5,#00bcd4);
+  font-weight:700;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.search-btn:hover{
+  transform:scale(1.05);
+}
+
+/* CARD */
+.card{
+  width:100%;
+  max-width:420px;
+  background:var(--glass);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:30px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.4);
+  display:none;
+}
+
+.card.show{display:block;}
+
+.city{
+  font-size:1.6rem;
+  font-weight:700;
+}
+
+.temp{
+  font-size:4rem;
+  font-family:'Syne';
+  color:#00ffd5;
+  text-shadow:0 0 20px rgba(0,255,213,0.6);
+}
+
+.desc{
+  color:var(--muted);
+  margin-bottom:20px;
+}
+
+/* STATS */
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.stat{
+  padding:15px;
+  border-radius:14px;
+  background:rgba(255,255,255,0.04);
+  box-shadow:inset 0 0 10px rgba(255,255,255,0.03),
+             0 5px 20px rgba(0,0,0,0.3);
+}
+
+.stat small{color:var(--muted);}
+
+/* LOADER */
+.loader{
+  display:none;
+  margin-top:20px;
+}
+
+.loader.show{display:block;}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">Weather App</div>
+
+<div class="search-box">
+  <input id="cityInput" class="search-input" placeholder="Enter city...">
+  <button class="search-btn" onclick="fetchWeather()">Search</button>
+</div>
+
+<div class="loader" id="loader">Loading...</div>
+
+<div class="card" id="card">
+  <div class="city" id="city">Mumbai</div>
+  <div class="temp" id="temp">30°C</div>
+  <div class="desc" id="desc">Cloudy</div>
+
+  <div class="stats">
+    <div class="stat">
+      <small>Humidity</small>
+      <div id="humidity">70%</div>
+    </div>
+    <div class="stat">
+      <small>Wind</small>
+      <div id="wind">20 km/h</div>
+    </div>
+    <div class="stat">
+      <small>Feels</small>
+      <div id="feels">32°C</div>
+    </div>
+    <div class="stat">
+      <small>Visibility</small>
+      <div id="visibility">10 km</div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+const mock = {
+  temp: 30,
+  humidity: 75,
+  wind: 18,
+  feels: 32,
+  visibility: 10,
+  desc: "Partly Cloudy"
+};
+
+function fetchWeather(){
+  const city = document.getElementById("cityInput").value;
+  if(!city) return;
+
+  document.getElementById("loader").classList.add("show");
+  document.getElementById("card").classList.remove("show");
+
+  setTimeout(()=>{
+    document.getElementById("loader").classList.remove("show");
+
+    document.getElementById("city").innerText = city;
+    document.getElementById("temp").innerText = mock.temp + "°C";
+    document.getElementById("desc").innerText = mock.desc;
+    document.getElementById("humidity").innerText = mock.humidity + "%";
+    document.getElementById("wind").innerText = mock.wind + " km/h";
+    document.getElementById("feels").innerText = mock.feels + "°C";
+    document.getElementById("visibility").innerText = mock.visibility + " km";
+
+    document.getElementById("card").classList.add("show");
+  },800);
+}
+
+fetchWeather();
+
+</script>
+
+</body>
+</html>
